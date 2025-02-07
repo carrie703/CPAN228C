@@ -19,11 +19,14 @@ public class ItemController {
     public String showForm(Model model) {
         model.addAttribute("item", new Item());
         model.addAttribute("brands", Item.getBrands());
+        model.addAttribute("items", stock); // Ensure items list is passed to the template
         return "add-item";
     }
 
     @PostMapping("/add-item")
     public String addItem(@ModelAttribute("item") Item item, Model model) {
+        System.out.println("Inside addItem() method"); // Debugging line
+        System.out.flush();
         List<String> errors = new ArrayList<>();
 
         // Manual validation
@@ -40,15 +43,26 @@ public class ItemController {
             errors.add("Price must be more than 1000.");
         }
 
-        // If there are errors, return to the form
         if (!errors.isEmpty()) {
             model.addAttribute("errors", errors);
             model.addAttribute("brands", Item.getBrands());
+            model.addAttribute("items", stock); // Ensure items list is passed back
             return "add-item";
         }
 
-        // Add item to stock and redirect on success
+        // Add item to stock
         stock.add(item);
-        return "redirect:/add-item?success";
+
+        System.out.println("Current stock items: " + stock.size());
+        System.out.flush(); // Forces the message to appear in the console
+
+        // Add success message and return the same page
+        model.addAttribute("success", "Item added successfully!");
+        model.addAttribute("brands", Item.getBrands());
+        model.addAttribute("items", stock); // Ensure updated stock is displayed
+
+        return "add-item"; // Stay on the same page and update table
+
     }
+
 }
