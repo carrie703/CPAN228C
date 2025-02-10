@@ -17,7 +17,10 @@ public class ItemController {
 
     @GetMapping("/add-item")
     public String showForm(Model model) {
-        model.addAttribute("item", new Item());
+        Item item = new Item();
+        item.setYear(2022);
+        item.setPrice(1001);
+        model.addAttribute("item", item);
         model.addAttribute("brands", Item.getBrands());
         model.addAttribute("items", stock); // Ensure items list is passed to the template
         return "add-item";
