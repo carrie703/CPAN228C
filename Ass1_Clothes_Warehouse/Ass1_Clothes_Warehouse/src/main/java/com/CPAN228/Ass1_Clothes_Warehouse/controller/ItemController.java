@@ -22,17 +22,16 @@ public class ItemController {
         item.setPrice(1001);
         model.addAttribute("item", item);
         model.addAttribute("brands", Item.getBrands());
-        model.addAttribute("items", stock); // Ensure items list is passed to the template
+        model.addAttribute("items", stock); 
         return "add-item";
     }
 
     @PostMapping("/add-item")
     public String addItem(@ModelAttribute("item") Item item, Model model) {
-        System.out.println("Inside addItem() method"); // Debugging line
+        System.out.println("Inside addItem() method"); 
         System.out.flush();
         List<String> errors = new ArrayList<>();
 
-        // Manual validation
         if (item.getName() == null || item.getName().trim().length() < 2) {
             errors.add("Name should have at least 2 characters.");
         }
@@ -49,22 +48,20 @@ public class ItemController {
         if (!errors.isEmpty()) {
             model.addAttribute("errors", errors);
             model.addAttribute("brands", Item.getBrands());
-            model.addAttribute("items", stock); // Ensure items list is passed back
+            model.addAttribute("items", stock); 
             return "add-item";
         }
 
-        // Add item to stock
         stock.add(item);
 
         System.out.println("Current stock items: " + stock.size());
-        System.out.flush(); // Forces the message to appear in the console
+        System.out.flush(); 
 
-        // Add success message and return the same page
         model.addAttribute("success", "Item added successfully!");
         model.addAttribute("brands", Item.getBrands());
-        model.addAttribute("items", stock); // Ensure updated stock is displayed
+        model.addAttribute("items", stock); 
 
-        return "add-item"; // Stay on the same page and update table
+        return "add-item"; 
 
     }
 

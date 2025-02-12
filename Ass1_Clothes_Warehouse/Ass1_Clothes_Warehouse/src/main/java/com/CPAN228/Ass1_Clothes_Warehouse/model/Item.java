@@ -27,7 +27,6 @@ public class Item {
         this.price = price;
     }
 
-    // Getters and Setters
     public long getId() { return id; }
     public String getName() { return name; }
     public Brand getBrand() { return brand; }
