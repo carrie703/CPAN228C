@@ -3,9 +3,12 @@ package com.CPAN228.Ass1_Clothes_Warehouse.controller;
 import com.CPAN228.Ass1_Clothes_Warehouse.model.Item;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import com.CPAN228.Ass1_Clothes_Warehouse.data.ItemRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort; 
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +17,11 @@ import java.util.List;
 public class ItemController {
 
     private final List<Item> stock = new ArrayList<>();
+    private final ItemRepository itemRepository;
+
+    public ItemController(ItemRepository itemRepository) {
+        this.itemRepository = itemRepository;
+    }
 
     @GetMapping("/add-item")
     public String showForm(Model model) {
@@ -22,13 +30,13 @@ public class ItemController {
         item.setPrice(1001);
         model.addAttribute("item", item);
         model.addAttribute("brands", Item.getBrands());
-        model.addAttribute("items", stock); 
+        model.addAttribute("items", stock);
         return "add-item";
     }
 
     @PostMapping("/add-item")
     public String addItem(@ModelAttribute("item") Item item, Model model) {
-        System.out.println("Inside addItem() method"); 
+        System.out.println("Inside addItem() method");
         System.out.flush();
         List<String> errors = new ArrayList<>();
 
@@ -48,21 +56,31 @@ public class ItemController {
         if (!errors.isEmpty()) {
             model.addAttribute("errors", errors);
             model.addAttribute("brands", Item.getBrands());
-            model.addAttribute("items", stock); 
+            model.addAttribute("items", stock);
             return "add-item";
         }
 
-        stock.add(item);
-
-        System.out.println("Current stock items: " + stock.size());
-        System.out.flush(); 
+        itemRepository.save(item);
 
         model.addAttribute("success", "Item added successfully!");
         model.addAttribute("brands", Item.getBrands());
-        model.addAttribute("items", stock); 
-
-        return "add-item"; 
-
+        return "redirect:/items";
     }
 
+    @GetMapping("/items")
+    public String listItems(Model model, @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "name") String sortBy) {
+        Page<Item> itemPage = itemRepository.findAll(PageRequest.of(page, size).withSort(Sort.by(sortBy)));
+        model.addAttribute("items", itemPage.getContent());
+        model.addAttribute("page", itemPage);
+        return "item-list";
+    }
+
+    @GetMapping("/items/brand/{brand}")
+    public String getItemsByBrand(@PathVariable Item.Brand brand, Model model) {
+        List<Item> items = itemRepository.findByBrandAndYear2022(brand);
+        model.addAttribute("items", items);
+        return "item-list";
+    }
 }
