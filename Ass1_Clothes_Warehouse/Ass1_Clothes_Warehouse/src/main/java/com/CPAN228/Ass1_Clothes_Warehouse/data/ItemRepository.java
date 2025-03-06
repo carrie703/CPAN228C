@@ -11,7 +11,7 @@ import java.util.List;
 public interface ItemRepository extends JpaRepository<Item, Long> {
     
     @Query("SELECT i FROM Item i WHERE i.brand = ?1 AND i.year = 2022")
-    List<Item> findByBrandAndYear2022(Item.Brand brand);
+    List<Item> findByBrandAndYear2022(String brand);
 
     Page<Item> findAll(Pageable pageable);
 }

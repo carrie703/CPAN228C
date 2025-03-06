@@ -18,6 +18,7 @@ public class ItemController {
 
     private final List<Item> stock = new ArrayList<>();
     private final ItemRepository itemRepository;
+    private static final List<String> BRANDS = List.of("BALENCIAGA", "STONE_ISLAND", "DIOR");
 
     public ItemController(ItemRepository itemRepository) {
         this.itemRepository = itemRepository;
@@ -29,7 +30,7 @@ public class ItemController {
         item.setYear(2022);
         item.setPrice(1001);
         model.addAttribute("item", item);
-        model.addAttribute("brands", Item.getBrands());
+        model.addAttribute("brands", BRANDS);
         model.addAttribute("items", stock);
         return "add-item";
     }
@@ -55,7 +56,7 @@ public class ItemController {
 
         if (!errors.isEmpty()) {
             model.addAttribute("errors", errors);
-            model.addAttribute("brands", Item.getBrands());
+            model.addAttribute("brands", BRANDS);
             model.addAttribute("items", stock);
             return "add-item";
         }
@@ -63,7 +64,7 @@ public class ItemController {
         itemRepository.save(item);
 
         model.addAttribute("success", "Item added successfully!");
-        model.addAttribute("brands", Item.getBrands());
+        model.addAttribute("brands", BRANDS);
         return "redirect:/items";
     }
 
@@ -78,7 +79,7 @@ public class ItemController {
     }
 
     @GetMapping("/items/brand/{brand}")
-    public String getItemsByBrand(@PathVariable Item.Brand brand, Model model) {
+    public String getItemsByBrand(@PathVariable String brand, Model model) {
         List<Item> items = itemRepository.findByBrandAndYear2022(brand);
         model.addAttribute("items", items);
         return "item-list";

@@ -32,7 +32,7 @@
         <div class="mb-3">
             <label for="brand" class="form-label">Brand:</label>
             <select id="brand" class="form-control" th:field="*{brand}" required>
-                <option th:each="brand : ${brands}" th:value="${brand}" th:text="${brand}"></option>
+                <option th:each="brand : ${brands}" th:value="${brand}" th:text="${brand}" required>
             </select>
         </div>
 
