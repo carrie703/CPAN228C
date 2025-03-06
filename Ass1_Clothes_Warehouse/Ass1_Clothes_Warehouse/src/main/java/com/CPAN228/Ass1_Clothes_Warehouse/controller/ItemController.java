@@ -80,10 +80,19 @@ public class ItemController {
 
     @GetMapping("/items/brand/{brand}")
     public String getItemsByBrand(@PathVariable String brand, Model model) {
-        System.out.println("Requested brand: " + brand);  // Log the brand name
+        System.out.println("Requested brand: " + brand);  // Debugging log
 
-        List<Item> items = itemRepository.findByBrandAndYear2022(brand);
-        model.addAttribute("items", items);
+        List<Item> items = itemRepository.findByBrandAndYear2022(brand.trim().toUpperCase());
+
+        if (items == null || items.isEmpty()) {
+            model.addAttribute("error", "No items found for brand: " + brand);
+            model.addAttribute("items", List.of()); // Ensure Thymeleaf does not break
+        } else {
+            model.addAttribute("items", items);
+        }
+
+        model.addAttribute("page", null);
         return "item-list";
     }
+
 }
