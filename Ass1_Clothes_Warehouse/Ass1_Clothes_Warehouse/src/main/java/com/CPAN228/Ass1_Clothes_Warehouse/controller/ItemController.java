@@ -92,7 +92,6 @@ public class ItemController {
         }
 
         model.addAttribute("page", null);
-
         return "item-list";
     }
 
