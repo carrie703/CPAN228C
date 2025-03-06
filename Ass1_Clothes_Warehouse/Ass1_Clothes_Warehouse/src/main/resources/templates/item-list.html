@@ -8,40 +8,47 @@
 
 <body class="container mt-4">
 
-    <h2>Items List</h2>
+<h2>Items List</h2>
 
-    <div th:if="${items != null}">
-        <button class="btn btn-primary" th:href="@{/items/brand/BALENCIAGA}">Show Balenciaga Items for 2022</button>
-        <button class="btn btn-primary" th:href="@{/items/brand/STONE_ISLAND}">Show Stone Island Items for 2022</button>
-        <button class="btn btn-primary" th:href="@{/items/brand/DIOR}">Show Dior Items for 2022</button>
+<div th:if="${items == null or items.isEmpty()}">
+    <p th:text="${error} ?: 'No items available for this brand.'"></p>
+</div>
 
-        <table class="table table-bordered mt-4">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Brand</th>
-                    <th>Year</th>
-                    <th>Price</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="item : ${items}">
-                    <td th:text="${item.name}"></td>
-                    <td th:text="${item.brand}"></td>
-                    <td th:text="${item.year}"></td>
-                    <td th:text="${item.price}"></td>
-                </tr>
-            </tbody>
-        </table>
+<div th:if="${items != null}">
+    <a class="btn btn-primary" th:href="@{/items/brand/BALENCIAGA}">Show Balenciaga Items for 2022</a>
+    <a class="btn btn-primary" th:href="@{/items/brand/STONE_ISLAND}">Show Stone Island Items for 2022</a>
+    <a class="btn btn-primary" th:href="@{/items/brand/DIOR}">Show Dior Items for 2022</a>
 
-        <div>
-            <span th:text="'Page ' + ${page.number + 1} + ' of ' + ${page.totalPages}"></span>
+    <table class="table table-bordered mt-4">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Brand</th>
+            <th>Year</th>
+            <th>Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${items}">
+            <td th:text="${item.name}"></td>
+            <td th:text="${item.brand}"></td>
+            <td th:text="${item.year}"></td>
+            <td th:text="${item.price}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div>
+        <div th:if="${page != null}">
+            <span th:text="'Page ' + (${page.number + 1}) + ' of ' + ${page.totalPages}"></span>
             <div>
-                <a th:href="@{/items?page=${page.number - 1}}">Previous</a>
-                <a th:href="@{/items?page=${page.number + 1}}">Next</a>
+                <a th:if="${page.hasPrevious()}" th:href="@{/items(page=${page.number - 1})}" class="btn btn-secondary">Previous</a>
+                <a th:if="${page.hasNext()}" th:href="@{/items(page=${page.number + 1})}" class="btn btn-secondary">Next</a>
             </div>
         </div>
+
     </div>
+</div>
 
 </body>
 
