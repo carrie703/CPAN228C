@@ -70,7 +70,7 @@ public class ItemController {
 
     @GetMapping("/items")
     public String listItems(Model model, @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "3") int size,
             @RequestParam(defaultValue = "name") String sortBy) {
         Page<Item> itemPage = itemRepository.findAll(PageRequest.of(page, size).withSort(Sort.by(sortBy)));
         model.addAttribute("items", itemPage.getContent());
@@ -80,6 +80,8 @@ public class ItemController {
 
     @GetMapping("/items/brand/{brand}")
     public String getItemsByBrand(@PathVariable String brand, Model model) {
+        System.out.println("Requested brand: " + brand);  // Log the brand name
+
         List<Item> items = itemRepository.findByBrandAndYear2022(brand);
         model.addAttribute("items", items);
         return "item-list";

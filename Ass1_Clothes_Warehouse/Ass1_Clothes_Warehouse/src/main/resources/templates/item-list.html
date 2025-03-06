@@ -37,8 +37,9 @@
         <div>
             <span th:text="'Page ' + ${page.number + 1} + ' of ' + ${page.totalPages}"></span>
             <div>
-                <a th:href="@{/items?page=${page.number - 1}}">Previous</a>
-                <a th:href="@{/items?page=${page.number + 1}}">Next</a>
+                <a th:href="@{/items?page=${page.number - 1}}" th:if="${page.hasPrevious()}">Previous</a>
+                <a th:href="@{/items?page=${page.number + 1}}" th:if="${page.hasNext()}">Next</a>
+
             </div>
         </div>
     </div>
