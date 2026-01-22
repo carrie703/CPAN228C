@@ -9,50 +9,50 @@
 
 <body>
     <div class="container">
-    <div th:replace="fragments/header :: header"></div>
-    <div class="hero-section">
-        <h1>Items List</h1>
-    </div>
-
-    <div th:if="${items != null}">
-        <div class="filter-buttons">
-            <a th:href="@{/items}" class="btn">Show All Items</a>
-            <a th:href="@{/items/brand/BALENCIAGA}" class="btn">Show Balenciaga Items for 2022</a>
-            <a th:href="@{/items/brand/STONE_ISLAND}" class="btn">Show Stone Island Items for 2022</a>
-            <a th:href="@{/items/brand/DIOR}" class="btn">Show Dior Items for 2022</a>
+        <div th:replace="fragments/header :: header"></div>
+        <div class="hero-section">
+            <h1>Items List</h1>
         </div>
 
-        <table th:if="${not #lists.isEmpty(items)}">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Brand</th>
-                    <th>Year</th>
-                    <th>Price</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="item : ${items}">
-                    <td th:text="${item.name}"></td>
-                    <td th:text="${item.brand}"></td>
-                    <td th:text="${item.year}"></td>
-                    <td th:text="'$' + ${#numbers.formatDecimal(item.price, 1, 2)}"></td>
-                </tr>
-            </tbody>
-        </table>
-        
-        <div th:if="${#lists.isEmpty(items)}" class="alert alert-info">
-            <p>No items found. Please try a different filter.</p>
-        </div>
+        <div th:if="${items != null}">
+            <div class="filter-buttons">
+                <a th:href="@{/items}" class="btn">Show All Items</a>
+                <a th:href="@{/items/brand/BALENCIAGA}" class="btn">Show Balenciaga Items for 2022</a>
+                <a th:href="@{/items/brand/STONE_ISLAND}" class="btn">Show Stone Island Items for 2022</a>
+                <a th:href="@{/items/brand/DIOR}" class="btn">Show Dior Items for 2022</a>
+            </div>
 
-        <div class="pagination" th:if="${page != null}">
-            <a th:href="@{/items(page=${page.number - 1}, size=${page.size}, sortBy=${param.sortBy})}" 
-               th:if="${page.hasPrevious()}">← Previous</a>
-            <span th:text="'Page ' + ${page.number + 1} + ' of ' + ${page.totalPages}"></span>
-            <a th:href="@{/items(page=${page.number + 1}, size=${page.size}, sortBy=${param.sortBy})}" 
-               th:if="${page.hasNext()}">Next →</a>
+            <table th:if="${not #lists.isEmpty(items)}">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Brand</th>
+                        <th>Year</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="item : ${items}">
+                        <td th:text="${item.name}"></td>
+                        <td th:text="${item.brand}"></td>
+                        <td th:text="${item.year}"></td>
+                        <td th:text="'$' + ${#numbers.formatDecimal(item.price, 1, 2)}"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div th:if="${#lists.isEmpty(items)}" class="alert alert-info">
+                <p>No items found. Please try a different filter.</p>
+            </div>
+
+            <div class="pagination" th:if="${page != null}">
+                <a th:href="@{/items(page=${page.number - 1}, size=${page.size}, sortBy=${param.sortBy})}"
+                    th:if="${page.hasPrevious()}">← Previous</a>
+                <span th:text="'Page ' + ${page.number + 1} + ' of ' + ${page.totalPages}"></span>
+                <a th:href="@{/items(page=${page.number + 1}, size=${page.size}, sortBy=${param.sortBy})}"
+                    th:if="${page.hasNext()}">Next →</a>
+            </div>
         </div>
-    </div>
 </body>
 
 </html>
